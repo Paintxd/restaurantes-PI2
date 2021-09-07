@@ -38,14 +38,13 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String name, String cpf, String address, String phoneNumber, String email, String password, UserRole userRole) {
+    public User(String name, String cpf, String address, String phoneNumber, String email, String password) {
         this.name = name;
         this.cpf = cpf;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
-        this.userRole = userRole;
     }
 
     @Override
