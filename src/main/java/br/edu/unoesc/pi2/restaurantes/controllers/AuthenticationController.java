@@ -1,12 +1,11 @@
 package br.edu.unoesc.pi2.restaurantes.controllers;
 
-import br.edu.unoesc.pi2.restaurantes.configurations.security.TokenService;
 import br.edu.unoesc.pi2.restaurantes.dtos.LoginDto;
 import br.edu.unoesc.pi2.restaurantes.dtos.TokenDto;
-import br.edu.unoesc.pi2.restaurantes.repositorys.UserRepository;
+import br.edu.unoesc.pi2.restaurantes.services.LoginService;
 import javassist.NotFoundException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,32 +18,19 @@ import javax.validation.Valid;
 @RequestMapping("login")
 public class AuthenticationController {
 
-    private final AuthenticationManager authManager;
-    private final TokenService tokenService;
-    private final UserRepository userRepository;
+    private final LoginService loginService;
 
-    public AuthenticationController(AuthenticationManager authManager, TokenService tokenService, UserRepository userRepository) {
-        this.authManager = authManager;
-        this.tokenService = tokenService;
-        this.userRepository = userRepository;
+    public AuthenticationController(LoginService loginService) {
+        this.loginService = loginService;
     }
 
     @PostMapping
-    public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginDto loginDto) {
-        var loginData = loginDto.getUPAuthenticationToken();
-
+    public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginDto loginDto) throws NotFoundException {
         try {
-            var authenticate = authManager.authenticate(loginData);
-            String token = tokenService.generateToken(authenticate);
-            var user = userRepository.findByEmail(loginDto.getEmail())
-                    .orElseThrow(() -> new NotFoundException("user not found"));
-
-            return ResponseEntity.ok(new TokenDto(token, user.getId()));
+            return ResponseEntity.ok(loginService.signIn(loginDto));
         } catch (AuthenticationException e) {
-            return ResponseEntity.badRequest().build();
-        } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(401).build();
         }
-
     }
+
 }
