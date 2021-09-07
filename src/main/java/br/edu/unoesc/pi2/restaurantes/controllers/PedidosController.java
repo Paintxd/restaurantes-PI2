@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/pedidos")
 public class PedidosController {
 
-    @GetMapping("/")
+    @GetMapping
     private ResponseEntity<String> getPedidos() {
         return ResponseEntity.ok().body("ta ai");
     }
