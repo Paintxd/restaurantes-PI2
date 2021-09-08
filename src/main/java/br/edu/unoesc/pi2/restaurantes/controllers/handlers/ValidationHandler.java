@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ValidationHandler {
@@ -30,7 +29,7 @@ public class ValidationHandler {
                     String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
                     return new ErrorDto(fieldError.getField(), message);
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }

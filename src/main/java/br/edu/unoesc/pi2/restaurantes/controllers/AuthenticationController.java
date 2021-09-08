@@ -5,7 +5,6 @@ import br.edu.unoesc.pi2.restaurantes.dtos.TokenDto;
 import br.edu.unoesc.pi2.restaurantes.services.LoginService;
 import javassist.NotFoundException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +24,7 @@ public class AuthenticationController {
     }
 
     @PostMapping
-    public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginDto loginDto) throws NotFoundException {
+    public ResponseEntity<TokenDto> signIn(@RequestBody @Valid LoginDto loginDto) throws NotFoundException {
         try {
             return ResponseEntity.ok(loginService.signIn(loginDto));
         } catch (AuthenticationException e) {
