@@ -61,8 +61,7 @@ CREATE TABLE ESTOQUE (
                 ESTOQUE_ID INTEGER NOT NULL DEFAULT nextval('estoque_estoque_id_seq'),
                 QTDE INTEGER NOT NULL,
                 QTDE_MINIMA INTEGER,
-                DT_ENTRADA DATE NOT NULL,
-                DT_TERMINO DATE,
+                DT_ATUALIZACAO DATE NOT NULL,
                 ITEM_ID INTEGER NOT NULL,
                 CONSTRAINT estoque_id_pk PRIMARY KEY (ESTOQUE_ID)
 );

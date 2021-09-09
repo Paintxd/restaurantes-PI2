@@ -1,6 +1,7 @@
 package br.edu.unoesc.pi2.restaurantes.models;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Table(name = "item")
 @Entity
@@ -36,6 +37,19 @@ public class Item {
         this.measurementUnit = measurementUnit;
         this.value = value;
         this.supplier = supplier;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return id.equals(item.id) && code.equals(item.code) && description.equals(item.description) && measurementUnit.equals(item.measurementUnit) && value.equals(item.value) && supplier.equals(item.supplier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, code, description, measurementUnit, value, supplier);
     }
 
     public Integer getId() {

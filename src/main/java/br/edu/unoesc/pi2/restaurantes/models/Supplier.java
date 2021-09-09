@@ -3,6 +3,7 @@ package br.edu.unoesc.pi2.restaurantes.models;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Table(name = "fornecedor")
@@ -42,6 +43,19 @@ public class Supplier {
         this.stateIdentifier = stateIdentifier;
         this.status = SupplierStatusEnum.ACTIVE;
         this.insertionDate = LocalDate.now();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Supplier supplier = (Supplier) o;
+        return Objects.equals(id, supplier.id) && Objects.equals(name, supplier.name) && Objects.equals(inCharge, supplier.inCharge) && Objects.equals(insertionDate, supplier.insertionDate) && Objects.equals(cnpj, supplier.cnpj) && Objects.equals(stateIdentifier, supplier.stateIdentifier) && status == supplier.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, inCharge, insertionDate, cnpj, stateIdentifier, status);
     }
 
     public Integer getId() {
