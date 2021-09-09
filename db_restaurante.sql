@@ -32,6 +32,7 @@ CREATE TABLE ITEM (
                 DESCRICAO VARCHAR(100) NOT NULL,
                 UNIDADE_MEDIDA VARCHAR(5) NOT NULL,
                 VLR DOUBLE PRECISION NOT NULL,
+                FORNECEDOR_ID INTEGER NOT NULL,
                 CONSTRAINT item_id_pk PRIMARY KEY (ITEM_ID)
 );
 
@@ -42,13 +43,10 @@ CREATE SEQUENCE item_cardapio_itemcardapio_id_seq;
 
 CREATE SEQUENCE item_cardapio_cardapio_id_seq;
 
-CREATE SEQUENCE item_cardapio_item_id_seq;
-
 CREATE TABLE ITEM_CARDAPIO (
                 ITEMCARDAPIO_ID INTEGER NOT NULL DEFAULT nextval('item_cardapio_itemcardapio_id_seq'),
                 QTDE INTEGER NOT NULL,
                 CARDAPIO_ID INTEGER NOT NULL DEFAULT nextval('item_cardapio_cardapio_id_seq'),
-                ITEM_ID INTEGER NOT NULL DEFAULT nextval('item_cardapio_item_id_seq'),
                 CONSTRAINT item_cardapio_id_pk PRIMARY KEY (ITEMCARDAPIO_ID)
 );
 
@@ -56,8 +54,6 @@ CREATE TABLE ITEM_CARDAPIO (
 ALTER SEQUENCE item_cardapio_itemcardapio_id_seq OWNED BY ITEM_CARDAPIO.ITEMCARDAPIO_ID;
 
 ALTER SEQUENCE item_cardapio_cardapio_id_seq OWNED BY ITEM_CARDAPIO.CARDAPIO_ID;
-
-ALTER SEQUENCE item_cardapio_item_id_seq OWNED BY ITEM_CARDAPIO.ITEM_ID;
 
 CREATE SEQUENCE estoque_estoque_id_seq;
 
@@ -98,13 +94,6 @@ COMMENT ON COLUMN FORNECEDOR.SITUACAO IS '1 - ATIVO
 
 
 ALTER SEQUENCE fornecedor_fornecedor_id_seq OWNED BY FORNECEDOR.FORNECEDOR_ID;
-
-CREATE TABLE R_ITEM_FORNECEDOR (
-                FORNECEDOR_ID INTEGER NOT NULL,
-                ITEM_ID INTEGER NOT NULL,
-                CONSTRAINT r_itemfornecedor_pfk PRIMARY KEY (FORNECEDOR_ID, ITEM_ID)
-);
-
 
 CREATE SEQUENCE tipopessoa_tppessoa_seq;
 
@@ -193,21 +182,7 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE R_ITEM_FORNECEDOR ADD CONSTRAINT item_r_item_fornecedor_fk
-FOREIGN KEY (ITEM_ID)
-REFERENCES ITEM (ITEM_ID)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
-
 ALTER TABLE ESTOQUE ADD CONSTRAINT item_estoque_fk
-FOREIGN KEY (ITEM_ID)
-REFERENCES ITEM (ITEM_ID)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
-
-ALTER TABLE ITEM_CARDAPIO ADD CONSTRAINT item_item_cardapio_fk
 FOREIGN KEY (ITEM_ID)
 REFERENCES ITEM (ITEM_ID)
 ON DELETE NO ACTION
@@ -228,16 +203,16 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE R_ITEM_FORNECEDOR ADD CONSTRAINT fornecedor_r_item_fornecedor_fk
-FOREIGN KEY (FORNECEDOR_ID)
-REFERENCES FORNECEDOR (FORNECEDOR_ID)
+ALTER TABLE usuario ADD CONSTRAINT tipo_pessoa_pessoa_fk
+FOREIGN KEY (TPPESSOA_ID)
+REFERENCES TIPO_PESSOA (TPPESSOA_ID)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE usuario ADD CONSTRAINT tipo_pessoa_pessoa_fk
-FOREIGN KEY (TPPESSOA_ID)
-REFERENCES TIPO_PESSOA (TPPESSOA_ID)
+ALTER TABLE ITEM ADD CONSTRAINT fornecedor_item_fk
+FOREIGN KEY (FORNECEDOR_ID)
+REFERENCES FORNECEDOR (FORNECEDOR_ID)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
@@ -292,12 +267,19 @@ INSERT INTO cardapio (nome, vlr_preparo, tempo_preparo, unidade_id) VALUES
 ('Hamburguer da Casa', 5, 15 , 1)
 ,('Porção de petiscos', 10, 20 , 2);
 
-INSERT INTO tipo_pessoa (descricao) VALUES ('USUARIO'), ('FUNCIONARIO');  
+INSERT INTO tipo_pessoa (descricao) VALUES ('USUARIO'), ('FUNCIONARIO');
 
 INSERT INTO usuario (nome, cpf, tppessoa_id, endereco, telefone, email, senha)
 VALUES
 ('Jonathan da Cruz', '42720955019', 1, 'Avenida Beria Rio, Florianópolis SC', '049999763242', 'jonathan@jonathan.com.br', '$2a$12$MwYkus57CQgP0tCqHHuscOME1/Bg6axpXmVtmAiUiEu5egekNX6jS'),
 ('Joao Paulo', '64249420094', 2, 'Avenida Getulio Dorneles, Chapeco SC', '049899763242', 'joaopaulo@gmail.com', '$2a$12$uCwp8gfpl7BvPBfoBKqVUucRvjUGvKqWsGVm1LxaEJ1S7bjrwvPg2');
 
-INSERT INTO item (cd, descricao, unidade_medida, vlr) VALUES (8744, 'Hamburguer Artesanal', 'UN', 6.5);
-INSERT INTO item (cd, descricao, unidade_medida, vlr) VALUES (8745, 'Coca cola 350 ml', 'UN', 2.5);
+INSERT INTO fornecedor (nome_fantasia, responsavel, cnpj, dt_incl, inscricao_estadual, situacao)
+VALUES
+    ('Ambev', 'Joao Paulo', '71137756000125', NOW(), '7037800117', 1),
+    ('Seara', 'Joao Paulo', '49319580000173', NOW(), '7477434051', 1);
+
+INSERT INTO item (cd, descricao, unidade_medida, vlr, FORNECEDOR_ID)
+VALUES
+    (8744, 'Hamburguer Artesanal', 'UN', 6.5, 2),
+    (8745, 'Coca cola 350 ml', 'UN', 2.5, 1);

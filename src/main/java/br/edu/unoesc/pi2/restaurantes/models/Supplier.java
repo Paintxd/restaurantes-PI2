@@ -32,20 +32,16 @@ public class Supplier {
     @Column(name = "situacao")
     private SupplierStatusEnum status;
 
-    @OneToMany(mappedBy = "supplier")
-    private Set<Item> items = new HashSet<>();
-
     public Supplier() {
     }
 
-    public Supplier(String name, String inCharge, String cnpj, String stateIdentifier, Set<Item> items) {
+    public Supplier(String name, String inCharge, String cnpj, String stateIdentifier) {
         this.name = name;
         this.inCharge = inCharge;
         this.cnpj = cnpj;
         this.stateIdentifier = stateIdentifier;
-        this.items = items;
-        this.insertionDate = LocalDate.now();
         this.status = SupplierStatusEnum.ACTIVE;
+        this.insertionDate = LocalDate.now();
     }
 
     public Integer getId() {
@@ -100,14 +96,6 @@ public class Supplier {
         this.status = status;
     }
 
-    public Set<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(Set<Item> items) {
-        this.items = items;
-    }
-
     @Override
     public String toString() {
         return "Supplier{" +
@@ -118,7 +106,6 @@ public class Supplier {
                 ", cnpj='" + cnpj + '\'' +
                 ", stateIdentifier='" + stateIdentifier + '\'' +
                 ", status=" + status +
-                ", items=" + items +
                 '}';
     }
 }

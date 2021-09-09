@@ -24,6 +24,7 @@ public class Item {
     private Double value;
 
     @ManyToOne
+    @JoinColumn(name = "fornecedor_id", referencedColumnName = "fornecedor_id")
     private Supplier supplier;
 
     public Item() {
