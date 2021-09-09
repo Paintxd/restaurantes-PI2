@@ -59,9 +59,9 @@ CREATE SEQUENCE estoque_estoque_id_seq;
 
 CREATE TABLE ESTOQUE (
                 ESTOQUE_ID INTEGER NOT NULL DEFAULT nextval('estoque_estoque_id_seq'),
-                QTDE INTEGER NOT NULL,
-                QTDE_MINIMA INTEGER,
-                DT_ATUALIZACAO DATE NOT NULL,
+                QTDE NUMERIC(5,2) NOT NULL,
+                QTDE_MINIMA NUMERIC(5,2),
+                DT_ATUALIZACAO TIMESTAMP NOT NULL,
                 ITEM_ID INTEGER NOT NULL,
                 CONSTRAINT estoque_id_pk PRIMARY KEY (ESTOQUE_ID)
 );
@@ -127,9 +127,9 @@ CREATE SEQUENCE comanda_comanda_id_seq;
 
 CREATE TABLE COMANDA (
                 COMANDA_ID INTEGER NOT NULL DEFAULT nextval('comanda_comanda_id_seq'),
-                DT_INIC DATE NOT NULL,
-                DT_ENCERRAMENTO DATE,
-                VLR_TOTAL INTEGER,
+                DT_INIC TIMESTAMP NOT NULL,
+                DT_ENCERRAMENTO TIMESTAMP,
+                VLR_TOTAL DOUBLE PRECISION,
                 USUARIO_ID INTEGER NOT NULL,
                 CONSTRAINT comanda_id_pk PRIMARY KEY (COMANDA_ID)
 );
@@ -141,9 +141,9 @@ CREATE SEQUENCE pedido_pedido_id_seq;
 
 CREATE TABLE PEDIDO (
                 PEDIDO_ID INTEGER NOT NULL DEFAULT nextval('pedido_pedido_id_seq'),
-                DT_INIC DATE,
+                DT_INIC TIMESTAMP,
                 APROVADO INTEGER NOT NULL,
-                DT_FIM DATE,
+                DT_FIM TIMESTAMP,
                 COMANDA_ID INTEGER NOT NULL,
                 USUARIO_ID_CLIENTE INTEGER NOT NULL,
                 USUARIO_ID_FUNCIONARIO INTEGER NOT NULL,

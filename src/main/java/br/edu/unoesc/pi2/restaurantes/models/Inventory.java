@@ -1,8 +1,11 @@
 package br.edu.unoesc.pi2.restaurantes.models;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Table(name = "estoque")
 @Entity
@@ -14,26 +17,33 @@ public class Inventory {
     private Integer id;
 
     @Column(name = "qtde")
-    private Double quantity;
+    private BigDecimal quantity;
 
     @Column(name = "qtde_minima")
-    private Double minQuantity;
+    private BigDecimal minQuantity;
 
     @Column(name = "dt_atualizacao")
-    private LocalDate updateDate;
+    private LocalDateTime updateDateTime;
 
     @OneToOne
     @JoinColumn(name = "item_id", referencedColumnName = "item_id")
     private Item item;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "r_estoque_itemcardapio",
+            joinColumns = @JoinColumn(name = "estoque_id"),
+            inverseJoinColumns = @JoinColumn(name = "itemcardapio_id"))
+    private Set<ItemMenu> menuItems = new HashSet<>();
+
     public Inventory() {
     }
 
-    public Inventory(Double quantity, Double minQuantity, Item item) {
+    public Inventory(BigDecimal quantity, BigDecimal minQuantity, Item item) {
         this.quantity = quantity;
         this.minQuantity = minQuantity;
         this.item = item;
-        this.updateDate = LocalDate.now();
+        this.updateDateTime = LocalDateTime.now();
     }
 
     @Override
@@ -41,40 +51,40 @@ public class Inventory {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Inventory inventory = (Inventory) o;
-        return id.equals(inventory.id) && quantity.equals(inventory.quantity) && minQuantity.equals(inventory.minQuantity) && updateDate.equals(inventory.updateDate) && item.equals(inventory.item);
+        return id.equals(inventory.id) && quantity.equals(inventory.quantity) && minQuantity.equals(inventory.minQuantity) && updateDateTime.equals(inventory.updateDateTime) && item.equals(inventory.item);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, quantity, minQuantity, updateDate, item);
+        return Objects.hash(id, quantity, minQuantity, updateDateTime, item);
     }
 
     public Integer getId() {
         return id;
     }
 
-    public Double getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Double quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 
-    public Double getMinQuantity() {
+    public BigDecimal getMinQuantity() {
         return minQuantity;
     }
 
-    public void setMinQuantity(Double minQuantity) {
+    public void setMinQuantity(BigDecimal minQuantity) {
         this.minQuantity = minQuantity;
     }
 
-    public LocalDate getUpdateDate() {
-        return updateDate;
+    public LocalDateTime getUpdateDateTime() {
+        return updateDateTime;
     }
 
-    public void setUpdateDate(LocalDate updateDate) {
-        this.updateDate = updateDate;
+    public void setUpdateDateTime(LocalDateTime updateDateTime) {
+        this.updateDateTime = updateDateTime;
     }
 
     public Item getItem() {
@@ -85,14 +95,23 @@ public class Inventory {
         this.item = item;
     }
 
+    public Set<ItemMenu> getMenuItems() {
+        return menuItems;
+    }
+
+    public void setMenuItems(Set<ItemMenu> menuItems) {
+        this.menuItems = menuItems;
+    }
+
     @Override
     public String toString() {
         return "Inventory{" +
                 "id=" + id +
                 ", quantity=" + quantity +
                 ", minQuantity=" + minQuantity +
-                ", updateDate=" + updateDate +
+                ", updateDateTime=" + updateDateTime +
                 ", item=" + item +
+                ", menuItems=" + menuItems +
                 '}';
     }
 }

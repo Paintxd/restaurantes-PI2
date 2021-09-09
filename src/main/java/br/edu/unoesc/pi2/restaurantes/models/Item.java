@@ -95,4 +95,16 @@ public class Item {
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", code=" + code +
+                ", description='" + description + '\'' +
+                ", measurementUnit='" + measurementUnit + '\'' +
+                ", value=" + value +
+                ", supplier=" + supplier +
+                '}';
+    }
 }

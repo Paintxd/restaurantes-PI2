@@ -2,9 +2,7 @@ package br.edu.unoesc.pi2.restaurantes.models;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Table(name = "fornecedor")
 @Entity
