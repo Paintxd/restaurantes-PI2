@@ -1,30 +1,31 @@
 package br.edu.unoesc.pi2.restaurantes.dtos;
 
-import br.edu.unoesc.pi2.restaurantes.models.SupplierStatusEnum;
+import br.edu.unoesc.pi2.restaurantes.models.Supplier;
+import org.hibernate.validator.constraints.Length;
 
-import java.time.LocalDate;
+import javax.validation.constraints.NotBlank;
 
-public class SupplierDto {
+public class SupplierViewDto {
 
+    @NotBlank(message = "Informe um nome")
     private String name;
 
+    @NotBlank(message = "Informe um responsavel")
     private String inCharge;
 
-    private LocalDate insertionDate;
-
+    @NotBlank(message = "Informe um cnpj")
+    @Length(min = 14, message = "Informe um cnpj valido")
     private String cnpj;
 
+    @NotBlank(message = "Informe um identificador estadual")
+    @Length(min = 9, max = 14, message = "Identificacao estadual deve possuir no minimo 9 e no maximo 14 caracteres")
     private String stateIdentifier;
 
-    private SupplierStatusEnum status;
-
-    public SupplierDto(String name, String inCharge, LocalDate insertionDate, String cnpj, String stateIdentifier, SupplierStatusEnum status) {
+    public SupplierViewDto(String name, String inCharge, String cnpj, String stateIdentifier) {
         this.name = name;
         this.inCharge = inCharge;
-        this.insertionDate = insertionDate;
         this.cnpj = cnpj;
         this.stateIdentifier = stateIdentifier;
-        this.status = status;
     }
 
     public String getName() {
@@ -43,14 +44,6 @@ public class SupplierDto {
         this.inCharge = inCharge;
     }
 
-    public LocalDate getInsertionDate() {
-        return insertionDate;
-    }
-
-    public void setInsertionDate(LocalDate insertionDate) {
-        this.insertionDate = insertionDate;
-    }
-
     public String getCnpj() {
         return cnpj;
     }
@@ -67,11 +60,7 @@ public class SupplierDto {
         this.stateIdentifier = stateIdentifier;
     }
 
-    public SupplierStatusEnum getStatus() {
-        return status;
-    }
-
-    public void setStatus(SupplierStatusEnum status) {
-        this.status = status;
+    public Supplier getSupplier() {
+        return new Supplier(name, inCharge, cnpj, stateIdentifier);
     }
 }

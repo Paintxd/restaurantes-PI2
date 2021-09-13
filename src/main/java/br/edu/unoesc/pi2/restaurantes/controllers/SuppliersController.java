@@ -1,6 +1,6 @@
 package br.edu.unoesc.pi2.restaurantes.controllers;
 
-import br.edu.unoesc.pi2.restaurantes.dtos.SupplierDto;
+import br.edu.unoesc.pi2.restaurantes.dtos.SupplierViewDto;
 import br.edu.unoesc.pi2.restaurantes.models.Supplier;
 import br.edu.unoesc.pi2.restaurantes.services.SupplierService;
 import javassist.NotFoundException;
@@ -22,21 +22,26 @@ public class SuppliersController {
     }
 
     @GetMapping("info")
-    public ResponseEntity<Set<SupplierDto>> suppliersInfo() {
+    public ResponseEntity<Set<Supplier>> suppliersInfo() {
         return ResponseEntity.ok(supplierService.findAllSuppliers());
     }
 
     @GetMapping("info/{id}")
-    public ResponseEntity<SupplierDto> supplierInfo(@PathVariable Integer id) throws NotFoundException {
+    public ResponseEntity<Supplier> supplierInfo(@PathVariable Integer id) throws NotFoundException {
         return ResponseEntity.ok(supplierService.findSupplier(id));
     }
 
     @PostMapping("new")
-    public ResponseEntity<Supplier> newSupplier(@RequestBody @Valid SupplierDto supplierDto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<Supplier> newSupplier(@RequestBody @Valid SupplierViewDto supplierDto, UriComponentsBuilder uriBuilder) {
         var newSupplier = supplierService.newSupplier(supplierDto);
-        var uri = uriBuilder.path("/user/info/{id}").buildAndExpand(newSupplier.getId()).toUri();
+        var uri = uriBuilder.path("/suppliers/info/{id}").buildAndExpand(newSupplier.getId()).toUri();
 
         return ResponseEntity.created(uri).body(newSupplier);
+    }
+
+    @PatchMapping("disable/{id}")
+    public ResponseEntity<Supplier> disableSupplier(@PathVariable Integer id) throws NotFoundException {
+        return ResponseEntity.ok(supplierService.disableSupplier(id));
     }
 
 }

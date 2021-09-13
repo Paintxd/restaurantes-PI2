@@ -31,12 +31,12 @@ public class Item {
     public Item() {
     }
 
-    public Item(Integer code, String description, String measurementUnit, Double value, Supplier supplier) {
-        this.code = code;
+    public Item(String description, String measurementUnit, Double value, Supplier supplier) {
         this.description = description;
         this.measurementUnit = measurementUnit;
         this.value = value;
         this.supplier = supplier;
+        this.code = randomCode();
     }
 
     @Override
@@ -50,6 +50,12 @@ public class Item {
     @Override
     public int hashCode() {
         return Objects.hash(id, code, description, measurementUnit, value, supplier);
+    }
+
+    private Integer randomCode() {
+        var millis = String.valueOf(System.currentTimeMillis());
+
+        return Integer.valueOf(millis.substring(3));
     }
 
     public Integer getId() {

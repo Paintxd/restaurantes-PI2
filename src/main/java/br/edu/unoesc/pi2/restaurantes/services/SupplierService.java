@@ -1,14 +1,14 @@
 package br.edu.unoesc.pi2.restaurantes.services;
 
-import br.edu.unoesc.pi2.restaurantes.dtos.SupplierDto;
-import br.edu.unoesc.pi2.restaurantes.mappers.SupplierMapper;
+import br.edu.unoesc.pi2.restaurantes.dtos.SupplierViewDto;
 import br.edu.unoesc.pi2.restaurantes.models.Supplier;
+import br.edu.unoesc.pi2.restaurantes.models.SupplierStatusEnum;
 import br.edu.unoesc.pi2.restaurantes.repositorys.SupplierRepository;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class SupplierService {
@@ -19,27 +19,26 @@ public class SupplierService {
         this.supplierRepository = supplierRepository;
     }
 
-    public Set<SupplierDto> findAllSuppliers() {
-        var supplierMapper = SupplierMapper.INSTANCE;
-
-        return supplierRepository.findAll()
-                .stream()
-                .map(supplierMapper::supplierToSupplierDto)
-                .collect(Collectors.toSet());
+    public Set<Supplier> findAllSuppliers() {
+        return new HashSet<>(supplierRepository.findAll());
     }
 
-    public SupplierDto findSupplier(Integer id) throws NotFoundException {
+    public Supplier findSupplier(Integer id) throws NotFoundException {
+        return supplierRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Supplier id: " + id + " not found"));
+    }
+
+    public Supplier newSupplier(SupplierViewDto supplierDto) {
+        var supplier = supplierDto.getSupplier();
+
+        return supplierRepository.save(supplier);
+    }
+
+    public Supplier disableSupplier(Integer id) throws NotFoundException {
         var supplier = supplierRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Supplier id: " + id + " not found"));
-        var supplierMapper = SupplierMapper.INSTANCE;
 
-        return supplierMapper.supplierToSupplierDto(supplier);
-    }
-
-    public Supplier newSupplier(SupplierDto supplierDto) {
-        var supplierMapper = SupplierMapper.INSTANCE;
-
-        var supplier = supplierMapper.supplierDtoToSupplier(supplierDto);
+        supplier.setStatus(SupplierStatusEnum.INACTIVE);
 
         return supplierRepository.save(supplier);
     }
