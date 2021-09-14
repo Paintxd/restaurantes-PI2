@@ -4,6 +4,7 @@ import br.edu.unoesc.pi2.restaurantes.models.Item;
 import br.edu.unoesc.pi2.restaurantes.models.Supplier;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class ItemViewDto {
 
@@ -13,10 +14,10 @@ public class ItemViewDto {
     @NotBlank(message = "Informe uma unidade de medida")
     private String measurementUnit;
 
-    @NotBlank(message = "Informe um valor")
+    @NotNull(message = "Informe um valor")
     private Double value;
 
-    @NotBlank(message = "Informe um fornecedor")
+    @NotNull(message = "Informe um fornecedor")
     private Integer supplierId;
 
     public ItemViewDto(String description, String measurementUnit, Double value, Integer supplierId) {

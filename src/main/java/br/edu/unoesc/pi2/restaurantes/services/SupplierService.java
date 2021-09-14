@@ -7,8 +7,7 @@ import br.edu.unoesc.pi2.restaurantes.repositorys.SupplierRepository;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Service
 public class SupplierService {
@@ -19,8 +18,8 @@ public class SupplierService {
         this.supplierRepository = supplierRepository;
     }
 
-    public Set<Supplier> findAllSuppliers() {
-        return new HashSet<>(supplierRepository.findAll());
+    public List<Supplier> findAllSuppliers() {
+        return supplierRepository.findAll();
     }
 
     public Supplier findSupplier(Integer id) throws NotFoundException {

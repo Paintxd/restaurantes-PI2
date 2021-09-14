@@ -9,20 +9,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping("/suppliers")
-public class SuppliersController {
+public class SupplierController {
 
     private final SupplierService supplierService;
 
-    public SuppliersController(SupplierService supplierService) {
+    public SupplierController(SupplierService supplierService) {
         this.supplierService = supplierService;
     }
 
     @GetMapping("info")
-    public ResponseEntity<Set<Supplier>> suppliersInfo() {
+    public ResponseEntity<List<Supplier>> suppliersInfo() {
         return ResponseEntity.ok(supplierService.findAllSuppliers());
     }
 
