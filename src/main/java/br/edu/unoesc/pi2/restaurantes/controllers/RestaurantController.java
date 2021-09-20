@@ -34,7 +34,7 @@ public class RestaurantController {
     @PostMapping("new")
     public ResponseEntity<Restaurant> newRestaurant(@RequestBody @Valid RestaurantViewDto restaurantDto, UriComponentsBuilder uriBuilder) {
         var newRestaurant = restaurantService.newRestaurant(restaurantDto);
-        var uri = uriBuilder.path("/items/info/{id}").buildAndExpand(newRestaurant.getId()).toUri();
+        var uri = uriBuilder.path("/restaurants/info/{id}").buildAndExpand(newRestaurant.getId()).toUri();
 
         return ResponseEntity.created(uri).body(newRestaurant);
     }

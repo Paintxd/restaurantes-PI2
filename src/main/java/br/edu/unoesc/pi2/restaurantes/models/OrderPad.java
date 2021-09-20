@@ -22,7 +22,6 @@ public class OrderPad {
     @Column(name = "vlr_total")
     private Double paymentAmount;
 
-
     @ManyToOne
     @JoinColumn(name = "usuario_id", referencedColumnName = "usuario_id")
     private User client;

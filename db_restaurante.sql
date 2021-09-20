@@ -39,22 +39,6 @@ CREATE TABLE ITEM (
 
 ALTER SEQUENCE item_item_id_seq OWNED BY ITEM.ITEM_ID;
 
-CREATE SEQUENCE item_cardapio_itemcardapio_id_seq;
-
-CREATE SEQUENCE item_cardapio_cardapio_id_seq;
-
-CREATE TABLE ITEM_CARDAPIO (
-                ITEMCARDAPIO_ID INTEGER NOT NULL DEFAULT nextval('item_cardapio_itemcardapio_id_seq'),
-                QTDE INTEGER NOT NULL,
-                CARDAPIO_ID INTEGER NOT NULL DEFAULT nextval('item_cardapio_cardapio_id_seq'),
-                CONSTRAINT item_cardapio_id_pk PRIMARY KEY (ITEMCARDAPIO_ID)
-);
-
-
-ALTER SEQUENCE item_cardapio_itemcardapio_id_seq OWNED BY ITEM_CARDAPIO.ITEMCARDAPIO_ID;
-
-ALTER SEQUENCE item_cardapio_cardapio_id_seq OWNED BY ITEM_CARDAPIO.CARDAPIO_ID;
-
 CREATE SEQUENCE estoque_estoque_id_seq;
 
 CREATE TABLE ESTOQUE (

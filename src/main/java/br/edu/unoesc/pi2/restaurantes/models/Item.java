@@ -1,5 +1,7 @@
 package br.edu.unoesc.pi2.restaurantes.models;
 
+import org.hibernate.id.UUIDGenerator;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -55,7 +57,7 @@ public class Item {
     private Integer randomCode() {
         var millis = String.valueOf(System.currentTimeMillis());
 
-        return Integer.valueOf(millis.substring(3));
+        return Integer.valueOf(millis.substring(4));
     }
 
     public Integer getId() {

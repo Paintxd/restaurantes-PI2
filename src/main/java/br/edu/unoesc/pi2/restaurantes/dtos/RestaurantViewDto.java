@@ -9,6 +9,9 @@ public class RestaurantViewDto {
     @NotBlank(message = "Informe um segmento")
     private String type;
 
+    public RestaurantViewDto() {
+    }
+
     public RestaurantViewDto(String type) {
         this.type = type;
     }
