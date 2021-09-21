@@ -3,9 +3,7 @@ package br.edu.unoesc.pi2.restaurantes.models;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Table(name = "estoque")
 @Entity
@@ -28,13 +26,6 @@ public class Inventory {
     @OneToOne
     @JoinColumn(name = "item_id", referencedColumnName = "item_id")
     private Item item;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "r_estoque_itemcardapio",
-            joinColumns = @JoinColumn(name = "estoque_id"),
-            inverseJoinColumns = @JoinColumn(name = "itemcardapio_id"))
-    private Set<ItemMenu> menuItems = new HashSet<>();
 
     public Inventory() {
     }
@@ -95,14 +86,6 @@ public class Inventory {
         this.item = item;
     }
 
-    public Set<ItemMenu> getMenuItems() {
-        return menuItems;
-    }
-
-    public void setMenuItems(Set<ItemMenu> menuItems) {
-        this.menuItems = menuItems;
-    }
-
     @Override
     public String toString() {
         return "Inventory{" +
@@ -111,7 +94,6 @@ public class Inventory {
                 ", minQuantity=" + minQuantity +
                 ", updateDateTime=" + updateDateTime +
                 ", item=" + item +
-                ", menuItems=" + menuItems +
                 '}';
     }
 }

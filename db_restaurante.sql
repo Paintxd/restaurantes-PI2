@@ -57,7 +57,7 @@ CREATE TABLE ESTOQUE_CARDAPIO (
                 ESTOQUE_CARDAPIO_ID SERIAL,
                 ESTOQUE_ID INTEGER NOT NULL,
                 CARDAPIO_ID INTEGER NOT NULL,
-                QTDE INTEGER NOT NULL,
+                QTDE NUMERIC(5,2) NOT NULL,
                 CONSTRAINT estoque_cardapio_id_pk PRIMARY KEY (ESTOQUE_CARDAPIO_ID),
                 CONSTRAINT estoque_estoque_cardapio_fk FOREIGN KEY (ESTOQUE_ID) REFERENCES ESTOQUE,
                 CONSTRAINT cardapio_estoque_cardapio_fk FOREIGN KEY (CARDAPIO_ID) REFERENCES CARDAPIO
