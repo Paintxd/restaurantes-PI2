@@ -14,10 +14,12 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final SupplierService supplierService;
+    private final InventoryService inventoryService;
 
-    public ItemService(ItemRepository itemRepository, SupplierService supplierService) {
+    public ItemService(ItemRepository itemRepository, SupplierService supplierService, InventoryService inventoryService) {
         this.itemRepository = itemRepository;
         this.supplierService = supplierService;
+        this.inventoryService = inventoryService;
     }
 
     public List<ItemDto> findAllItems() {
@@ -40,6 +42,8 @@ public class ItemService {
         var supplier = supplierService.findSupplier(itemDto.getSupplierId());
         var item = itemDto.getItem(supplier);
         var newItem = itemRepository.save(item);
+        inventoryService.newInventory(newItem, itemDto.getMinQuantity());
+
         var itemMapper = ItemMapper.INSTANCE;
 
         return itemMapper.itemToItemDto(newItem);
