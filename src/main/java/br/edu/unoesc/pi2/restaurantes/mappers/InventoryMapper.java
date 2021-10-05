@@ -1,6 +1,6 @@
 package br.edu.unoesc.pi2.restaurantes.mappers;
 
-import br.edu.unoesc.pi2.restaurantes.dtos.InventoryViewDto;
+import br.edu.unoesc.pi2.restaurantes.dtos.InventoryDto;
 import br.edu.unoesc.pi2.restaurantes.models.Inventory;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,5 +15,6 @@ public interface InventoryMapper {
     @Mapping(source = "minQuantity", target = "minQuantity")
     @Mapping(source = "updateDateTime", target = "updateDateTime")
     @Mapping(source = "item.description", target = "itemName")
-    InventoryViewDto inventoryToInventoryViewDto(Inventory inventory);
+    @Mapping(source = "item.supplier.name", target = "supplierName")
+    InventoryDto inventoryToInventoryDto(Inventory inventory);
 }

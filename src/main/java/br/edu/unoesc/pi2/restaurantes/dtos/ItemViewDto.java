@@ -3,6 +3,7 @@ package br.edu.unoesc.pi2.restaurantes.dtos;
 import br.edu.unoesc.pi2.restaurantes.models.Item;
 import br.edu.unoesc.pi2.restaurantes.models.Supplier;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -22,6 +23,7 @@ public class ItemViewDto {
     private Integer supplierId;
 
     @NotNull(message = "Informe uma quantia minima para ter em estoque")
+    @Min(value = 0, message = "Quantidade minima deve ser maior que zero")
     private BigDecimal minQuantity;
 
     public ItemViewDto(String description, String measurementUnit, Double value, Integer supplierId, BigDecimal minQuantity) {

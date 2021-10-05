@@ -1,27 +1,25 @@
 package br.edu.unoesc.pi2.restaurantes.dtos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InventorySituationDto {
-    private List<InventoryViewDto> inInventory;
-    private List<InventoryViewDto> lackingInventory;
+    private final List<InventoryDto> inInventory = new ArrayList<>();
+    private final List<InventoryDto> lackingInventory = new ArrayList<>();
 
-    public InventorySituationDto() {
-    }
-
-    public List<InventoryViewDto> getInInventory() {
+    public List<InventoryDto> getInInventory() {
         return inInventory;
     }
 
-    public void addInInventory(InventoryViewDto inventoryItem) {
+    public void addInInventory(InventoryDto inventoryItem) {
         this.inInventory.add(inventoryItem);
     }
 
-    public List<InventoryViewDto> getLackingInventory() {
+    public List<InventoryDto> getLackingInventory() {
         return lackingInventory;
     }
 
-    public void addLackingInventory(InventoryViewDto inventoryItem) {
+    public void addLackingInventory(InventoryDto inventoryItem) {
         this.lackingInventory.add(inventoryItem);
     }
 }

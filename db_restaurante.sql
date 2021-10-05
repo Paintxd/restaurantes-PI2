@@ -239,3 +239,8 @@ INSERT INTO item (cd, descricao, unidade_medida, vlr, FORNECEDOR_ID)
 VALUES
     (8744, 'Hamburguer Artesanal', 'UN', 6.5, 2),
     (8745, 'Coca cola 350 ml', 'UN', 2.5, 1);
+
+INSERT INTO estoque (qtde, qtde_minima, dt_atualizacao, item_id)
+values
+    (100, 80, now(), 1),
+    (200, 150, now(), 2);

@@ -50,6 +50,11 @@ public class Inventory {
         return Objects.hash(id, quantity, minQuantity, updateDateTime, item);
     }
 
+    public void fillInventory(BigDecimal quantity) {
+        this.quantity = this.quantity.add(quantity);
+        this.updateDateTime = LocalDateTime.now();
+    }
+
     public Integer getId() {
         return id;
     }
