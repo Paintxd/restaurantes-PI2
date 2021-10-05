@@ -6,7 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-public class LoginDto {
+public class LoginViewDto {
 
     @NotBlank(message = "Informe um email")
     @Email

@@ -1,7 +1,7 @@
 package br.edu.unoesc.pi2.restaurantes.services;
 
 import br.edu.unoesc.pi2.restaurantes.configurations.security.TokenService;
-import br.edu.unoesc.pi2.restaurantes.dtos.LoginDto;
+import br.edu.unoesc.pi2.restaurantes.dtos.LoginViewDto;
 import br.edu.unoesc.pi2.restaurantes.dtos.TokenDto;
 import br.edu.unoesc.pi2.restaurantes.repositorys.UserRepository;
 import javassist.NotFoundException;
@@ -22,13 +22,13 @@ public class LoginService {
         this.userRepository = userRepository;
     }
 
-    public TokenDto signIn(LoginDto loginDto) throws NotFoundException, BadCredentialsException {
-        var loginData = loginDto.getUPAuthenticationToken();
+    public TokenDto signIn(LoginViewDto loginViewDto) throws NotFoundException, BadCredentialsException {
+        var loginData = loginViewDto.getUPAuthenticationToken();
 
         var authenticate = authManager.authenticate(loginData);
         String token = tokenService.generateToken(authenticate);
-        var user = userRepository.findByEmail(loginDto.getEmail())
-                .orElseThrow(() -> new NotFoundException("User email: " + loginDto.getEmail() + " not found"));
+        var user = userRepository.findByEmail(loginViewDto.getEmail())
+                .orElseThrow(() -> new NotFoundException("User email: " + loginViewDto.getEmail() + " not found"));
 
         return new TokenDto(token, user.getId());
     }

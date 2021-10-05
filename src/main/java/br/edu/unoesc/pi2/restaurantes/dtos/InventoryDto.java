@@ -3,19 +3,21 @@ package br.edu.unoesc.pi2.restaurantes.dtos;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class InventoryViewDto {
+public class InventoryDto {
     private Integer id;
     private BigDecimal quantity;
     private BigDecimal minQuantity;
     private LocalDateTime updateDateTime;
     private String itemName;
+    private String supplierName;
 
-    public InventoryViewDto(Integer id, BigDecimal quantity, BigDecimal minQuantity, LocalDateTime updateDateTime, String itemName) {
+    public InventoryDto(Integer id, BigDecimal quantity, BigDecimal minQuantity, LocalDateTime updateDateTime, String itemName, String supplierName) {
         this.id = id;
         this.quantity = quantity;
         this.minQuantity = minQuantity;
         this.updateDateTime = updateDateTime;
         this.itemName = itemName;
+        this.supplierName = supplierName;
     }
 
     public Integer getId() {
@@ -56,5 +58,13 @@ public class InventoryViewDto {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 }

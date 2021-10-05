@@ -1,7 +1,7 @@
 package br.edu.unoesc.pi2.restaurantes.services;
 
 import br.edu.unoesc.pi2.restaurantes.dtos.UserDto;
-import br.edu.unoesc.pi2.restaurantes.dtos.UserSignupDto;
+import br.edu.unoesc.pi2.restaurantes.dtos.UserSignupViewDto;
 import br.edu.unoesc.pi2.restaurantes.mappers.UserMapper;
 import br.edu.unoesc.pi2.restaurantes.repositorys.UserRepository;
 import br.edu.unoesc.pi2.restaurantes.repositorys.UserRoleRepository;
@@ -20,10 +20,10 @@ public class UserService {
         this.userRoleRepository = userRoleRepository;
     }
 
-    public UserDto userSignup(UserSignupDto userSignupDto) throws NotFoundException {
-        var user = userSignupDto.getUser();
-        var userRole = userRoleRepository.findByDescription(userSignupDto.getUserRole())
-                .orElseThrow(() -> new NotFoundException("Role " + userSignupDto.getUserRole() + " not found"));
+    public UserDto userSignup(UserSignupViewDto userSignupViewDto) throws NotFoundException {
+        var user = userSignupViewDto.getUser();
+        var userRole = userRoleRepository.findByDescription(userSignupViewDto.getUserRole())
+                .orElseThrow(() -> new NotFoundException("Role " + userSignupViewDto.getUserRole() + " not found"));
         user.setUserRole(userRole);
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 

@@ -1,6 +1,6 @@
 package br.edu.unoesc.pi2.restaurantes.controllers;
 
-import br.edu.unoesc.pi2.restaurantes.dtos.LoginDto;
+import br.edu.unoesc.pi2.restaurantes.dtos.LoginViewDto;
 import br.edu.unoesc.pi2.restaurantes.dtos.TokenDto;
 import br.edu.unoesc.pi2.restaurantes.services.LoginService;
 import javassist.NotFoundException;
@@ -24,9 +24,9 @@ public class AuthenticationController {
     }
 
     @PostMapping
-    public ResponseEntity<TokenDto> signIn(@RequestBody @Valid LoginDto loginDto) throws NotFoundException {
+    public ResponseEntity<TokenDto> signIn(@RequestBody @Valid LoginViewDto loginViewDto) throws NotFoundException {
         try {
-            return ResponseEntity.ok(loginService.signIn(loginDto));
+            return ResponseEntity.ok(loginService.signIn(loginViewDto));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(401).build();
         }

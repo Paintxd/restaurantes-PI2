@@ -1,7 +1,7 @@
 package br.edu.unoesc.pi2.restaurantes.controllers;
 
 import br.edu.unoesc.pi2.restaurantes.dtos.UserDto;
-import br.edu.unoesc.pi2.restaurantes.dtos.UserSignupDto;
+import br.edu.unoesc.pi2.restaurantes.dtos.UserSignupViewDto;
 import br.edu.unoesc.pi2.restaurantes.models.User;
 import br.edu.unoesc.pi2.restaurantes.services.UserService;
 import javassist.NotFoundException;
@@ -23,8 +23,8 @@ public class UserController {
     }
 
     @PostMapping("signup")
-    public ResponseEntity<UserDto> userSignup(@RequestBody @Valid UserSignupDto userSignupDto, UriComponentsBuilder uriBuilder) throws NotFoundException {
-        var newUser = userService.userSignup(userSignupDto);
+    public ResponseEntity<UserDto> userSignup(@RequestBody @Valid UserSignupViewDto userSignupViewDto, UriComponentsBuilder uriBuilder) throws NotFoundException {
+        var newUser = userService.userSignup(userSignupViewDto);
         var uri = uriBuilder.path("/user/info/{id}").buildAndExpand(newUser.getId()).toUri();
 
         return ResponseEntity.created(uri).body(newUser);
