@@ -19,10 +19,15 @@ public class InventoryMenuService {
         this.inventoryService = inventoryService;
     }
 
-    public InventoryMenu newInventoryMenu(Integer inventoryId, Menu menu, BigDecimal quantity) throws NotFoundException {
-        var inventory = inventoryService.findInventoryForMenu(inventoryId);
+    public InventoryMenu newInventoryMenu(Integer inventoryId, Menu menu, BigDecimal quantity) {
+        try {
+            var inventory = inventoryService.findInventoryForMenu(inventoryId);
 
-        return inventoryMenuRepository.save(new InventoryMenu(inventory, menu, quantity));
+            return inventoryMenuRepository.save(new InventoryMenu(inventory, menu, quantity));
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

@@ -4,6 +4,8 @@ CREATE SEQUENCE unidade_unidade_id_seq;
 CREATE TABLE UNIDADE (
                 UNIDADE_ID INTEGER NOT NULL DEFAULT nextval('unidade_unidade_id_seq'),
                 SEGMENTO VARCHAR(100) NOT NULL,
+                ENDERECO VARCHAR(400) NOT NULL,
+                NOME VARCHAR(100) NOT NULL,
                 CONSTRAINT unidade_id_pk PRIMARY KEY (UNIDADE_ID)
 );
 
@@ -208,27 +210,32 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-INSERT INTO unidade (segmento) VALUES ('Shopping');
-INSERT INTO unidade (segmento) VALUES ('Tradicional');
---
-INSERT INTO cardapio (nome, vlr_preparo, tempo_preparo, unidade_id) VALUES
-('Coca cola 350 ml', 0, 0 , 1)
-,('Coca cola 350 ml', 0, 0 , 2);
+INSERT INTO unidade (segmento, nome, endereco)
+VALUES
+    ('Shopping', 'Barzim do shops', 'Shopping da barra, Avenida Beria Rio, Florianópolis SC'),
+    ('Tradicional', 'Restaurante do zé', 'Avenida Getulio Dorneles, Chapeco SC');
 
-INSERT INTO cardapio (nome, vlr_preparo, tempo_preparo, unidade_id) VALUES
-('Coca cola 600 ml', 0, 0 , 1)
-,('Coca cola 600 ml', 0, 0 , 2);
+INSERT INTO cardapio (nome, vlr_preparo, tempo_preparo, unidade_id)
+VALUES
+    ('Coca cola 350 ml', 0, 0 , 1),
+    ('Coca cola 350 ml', 0, 0 , 2);
 
-INSERT INTO cardapio (nome, vlr_preparo, tempo_preparo, unidade_id) VALUES
-('Hamburguer da Casa', 5, 15 , 1)
-,('Porção de petiscos', 10, 20 , 2);
+INSERT INTO cardapio (nome, vlr_preparo, tempo_preparo, unidade_id)
+VALUES
+    ('Coca cola 600 ml', 0, 0 , 1),
+    ('Coca cola 600 ml', 0, 0 , 2);
+
+INSERT INTO cardapio (nome, vlr_preparo, tempo_preparo, unidade_id)
+VALUES
+    ('Hamburguer da Casa', 5, 15 , 1),
+    ('Porção de petiscos', 10, 20 , 2);
 
 INSERT INTO tipo_pessoa (descricao) VALUES ('USUARIO'), ('FUNCIONARIO');
 
 INSERT INTO usuario (nome, cpf, tppessoa_id, endereco, telefone, email, senha)
 VALUES
-('Jonathan da Cruz', '42720955019', 1, 'Avenida Beria Rio, Florianópolis SC', '049999763242', 'jonathan@jonathan.com.br', '$2a$12$MwYkus57CQgP0tCqHHuscOME1/Bg6axpXmVtmAiUiEu5egekNX6jS'),
-('Joao Paulo', '64249420094', 2, 'Avenida Getulio Dorneles, Chapeco SC', '049899763242', 'joaopaulo@gmail.com', '$2a$12$uCwp8gfpl7BvPBfoBKqVUucRvjUGvKqWsGVm1LxaEJ1S7bjrwvPg2');
+    ('Jonathan da Cruz', '42720955019', 1, 'Avenida Beria Rio, Florianópolis SC', '049999763242', 'jonathan@jonathan.com.br', '$2a$12$MwYkus57CQgP0tCqHHuscOME1/Bg6axpXmVtmAiUiEu5egekNX6jS'),
+    ('Joao Paulo', '64249420094', 2, 'Avenida Getulio Dorneles, Chapeco SC', '049899763242', 'joaopaulo@gmail.com', '$2a$12$uCwp8gfpl7BvPBfoBKqVUucRvjUGvKqWsGVm1LxaEJ1S7bjrwvPg2');
 
 INSERT INTO fornecedor (nome_fantasia, responsavel, cnpj, dt_incl, inscricao_estadual, situacao)
 VALUES
@@ -241,6 +248,6 @@ VALUES
     (8745, 'Coca cola 350 ml', 'UN', 2.5, 1);
 
 INSERT INTO estoque (qtde, qtde_minima, dt_atualizacao, item_id)
-values
+VALUES
     (100, 80, now(), 1),
     (200, 150, now(), 2);

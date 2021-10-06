@@ -6,14 +6,35 @@ import javax.validation.constraints.NotBlank;
 
 public class RestaurantViewDto {
 
+    @NotBlank(message = "Informe um nome")
+    private String name;
+
+    @NotBlank(message = "Informe um endereço")
+    private String address;
+
     @NotBlank(message = "Informe um segmento")
     private String type;
 
-    public RestaurantViewDto() {
+    public RestaurantViewDto(String name, String address, String type) {
+        this.name = name;
+        this.address = address;
+        this.type = type;
     }
 
-    public RestaurantViewDto(String type) {
-        this.type = type;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getType() {
@@ -25,6 +46,6 @@ public class RestaurantViewDto {
     }
 
     public Restaurant getRestaurant() {
-        return new Restaurant(type);
+        return new Restaurant(name, address, type);
     }
 }

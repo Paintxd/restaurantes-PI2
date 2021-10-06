@@ -11,18 +11,42 @@ public class Restaurant {
     @Column(name = "unidade_id")
     private Integer id;
 
+    @Column(name = "nome")
+    private String name;
+
+    @Column(name = "endereco")
+    private String address;
+
     @Column(name = "segmento")
     private String type;
 
     public Restaurant() {
     }
 
-    public Restaurant(String type) {
+    public Restaurant(String name, String address, String type) {
+        this.name = name;
+        this.address = address;
         this.type = type;
     }
 
     public Integer getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getType() {
@@ -37,6 +61,8 @@ public class Restaurant {
     public String toString() {
         return "Restaurant{" +
                 "id=" + id +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
                 ", type='" + type + '\'' +
                 '}';
     }
