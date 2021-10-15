@@ -399,48 +399,6 @@ EXCEPTION
 END;
 $$ LANGUAGE plpgsql;
 
----
-CREATE OR REPLACE FUNCTION  fkg_fecha_comanda (en_usuario_id_clie int) RETURNS int   AS $$
-DECLARE 
-	vn_tot_pagar       float;
-    vn_comanda_id	   int;
- 
-BEGIN  
-   SELECT sum(i.vlr * cp.qtde * ec.qtde )
-      , c.comanda_id 
-     INTO vn_tot_pagar
-        , vn_comanda_id
-     FROM comanda c 
-     JOIN pedido  p           ON c.usuario_id   = p.usuario_id_cliente 
-     JOIN cardapio_pedido cp  ON p.pedido_id    = cp.pedido_id 
-     JOIN cardapio c2         ON cp.cardapio_id = c2.cardapio_id 
-     JOIN estoque_cardapio ec ON c2.cardapio_id = ec.cardapio_id 
-     JOIN estoque e           ON ec.estoque_id  = e.estoque_id 
-     JOIN item i              ON e.item_id 	    = i.item_id 
-     WHERE c.usuario_id                         = 1
-      AND p.aprovado 	                        = 1 --Pedido Aprovado
-      AND c.dt_encerramento  IS NULL
-    GROUP BY c.comanda_id;
-     
-    IF vn_comanda_id IS NOT NULL THEN 
-       --
-       UPDATE comanda  SET dt_encerramento = now()
-                         , vlr_total 	   = vn_tot_pagar
-       WHERE comanda_id  = vn_comanda_id;
- 
-    END IF;
-	
-   RETURN vn_pedido_id;
- 
-EXCEPTION
-
-   when others then 
-       ROLLBACK;
-       raise notice 'The transaction is in an uncommittable state. '
-                    'Transaction was rolled back';
-       raise notice '% %', SQLERRM, SQLSTATE;
-END;
-$$ LANGUAGE plpgsql;
 ------------------------------------------------
 CREATE OR REPLACE FUNCTION  fkg_fecha_comanda (en_usuario_id_clie int) RETURNS varchar   AS $$
 DECLARE 
@@ -460,7 +418,7 @@ BEGIN
      JOIN estoque_cardapio ec ON c2.cardapio_id = ec.cardapio_id 
      JOIN estoque e           ON ec.estoque_id  = e.estoque_id 
      JOIN item i              ON e.item_id 	    = i.item_id 
-     WHERE c.usuario_id                         = 1
+     WHERE c.usuario_id                         = en_usuario_id_clie
       AND p.aprovado 	                        = 1 --Pedido Aprovado
       AND c.dt_encerramento  IS NULL
     GROUP BY c.comanda_id;
