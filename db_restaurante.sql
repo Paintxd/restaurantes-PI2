@@ -52,14 +52,13 @@ CREATE TABLE ESTOQUE (
                 CONSTRAINT estoque_id_pk PRIMARY KEY (ESTOQUE_ID)
 );
 
-/* CRIADA PFK */
- 
-
 CREATE TABLE ESTOQUE_CARDAPIO (
+                ESTOQUE_CARDAPIO_ID SERIAL,
                 ESTOQUE_ID INTEGER NOT NULL,
                 CARDAPIO_ID INTEGER NOT NULL,
                 QTDE NUMERIC(5,2) NOT NULL,
-                CONSTRAINT estoque_cardapio_id_pk PRIMARY KEY (ESTOQUE_ID, CARDAPIO_ID ),
+                CONSTRAINT estoque_cardapio_id_pk PRIMARY KEY (ESTOQUE_CARDAPIO_ID),
+		CONSTRAINT estoque_cardapio_id_uk UNIQUE (ESTOQUE_ID, CARDAPIO_ID ),
                 CONSTRAINT estoque_estoque_cardapio_fk FOREIGN KEY (ESTOQUE_ID) REFERENCES ESTOQUE,
                 CONSTRAINT cardapio_estoque_cardapio_fk FOREIGN KEY (CARDAPIO_ID) REFERENCES CARDAPIO
 );
@@ -140,12 +139,13 @@ CREATE TABLE PEDIDO (
                 CONSTRAINT pedido_id_pk PRIMARY KEY (PEDIDO_ID)
 );
 
-/* CRIADA PFK */
 CREATE TABLE CARDAPIO_PEDIDO (
+                CARDAPIO_PEDIDO_ID SERIAL,
                 CARDAPIO_ID INTEGER NOT NULL,
                 PEDIDO_ID INTEGER NOT NULL,
                 QTDE INTEGER NOT NULL,
-                CONSTRAINT cardapio_pedido_id_pk PRIMARY KEY (CARDAPIO_ID, PEDIDO_ID ),
+                CONSTRAINT cardapio_pedido_id_pk PRIMARY KEY (CARDAPIO_PEDIDO_ID),
+		CONSTRAINT cardapio_pedido_id_uk UNIQUE(CARDAPIO_ID, PEDIDO_ID ),
                 CONSTRAINT cardapio_cardapio_pedido_fk FOREIGN KEY (CARDAPIO_ID) REFERENCES CARDAPIO,
                 CONSTRAINT pedido_cardapio_pedido_fk FOREIGN KEY (PEDIDO_ID) REFERENCES PEDIDO
 );
