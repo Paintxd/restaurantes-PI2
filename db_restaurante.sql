@@ -407,7 +407,7 @@ DECLARE
     vv_return	       varchar(100);
  
 BEGIN  
-   SELECT sum(i.vlr * cp.qtde * ec.qtde )
+   SELECT sum( ( (i.vlr * ec.qtde ) + c2.vlr_preparo) *  cp.qtde )
       , c.comanda_id 
      INTO vn_tot_pagar
         , vn_comanda_id
