@@ -6,11 +6,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/pedidos")
-public class PedidosController {
+@RequestMapping("/orders")
+public class OrdersController {
 
     @GetMapping
     private ResponseEntity<String> getPedidos() {
         return ResponseEntity.ok().body("ta ai");
     }
+
+
 }

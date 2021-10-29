@@ -248,10 +248,8 @@ INSERT INTO estoque (qtde, qtde_minima, dt_atualizacao, item_id)
 VALUES
     (100, 80, now(), 1),
     (200, 150, now(), 2);
-	
-INSERT INTO estoque_cardapio  VALUES (2, 1, 1);
 
-INSERT INTO estoque_cardapio  VALUES (2, 2, 1);
+INSERT INTO estoque_cardapio (estoque_id, cardapio_id, qtde)  VALUES (2, 1, 1), (2, 2, 1);
 
 INSERT INTO COMANDA (DT_INIC , dt_encerramento, vlr_total, usuario_id) VALUES (NOW() , NULL, NULL, 1);
 
@@ -260,67 +258,67 @@ VALUES (now(), 0, NULL, 1, 1, 2);
 
 INSERT INTO cardapio_pedido values  (1, 1, 2);
 
-/* STORED PROCEDURES  
+/* STORED PROCEDURES
 Chamar apenas fkg_gera_pedido e fkg_fecha_comanda
 */
 
 CREATE OR REPLACE FUNCTION  fkg_val_estoque (en_unidade_id      int
 										   , en_cardapio_id     int
-										   , en_qtde_pedidos	int  
+										   , en_qtde_pedidos	int
  										   ) RETURNS int   AS $$
-DECLARE 
+DECLARE
 	vn_aux       int;
 	vn_teste		int;
-	vt_estoque   record;      
-BEGIN  
-	FOR i IN 1 .. en_qtde_pedidos loop 
- 
+	vt_estoque   record;
+BEGIN
+	FOR i IN 1 .. en_qtde_pedidos loop
+
 		    FOR vt_estoque IN SELECT ec.estoque_id
-			     				   , ec.qtde 
-								  FROM cardapio c 
-								  JOIN estoque_cardapio ec  ON c.cardapio_id = ec.cardapio_id 
+			     				   , ec.qtde
+								  FROM cardapio c
+								  JOIN estoque_cardapio ec  ON c.cardapio_id = ec.cardapio_id
 								 WHERE c.unidade_id 	= en_unidade_id
 								   AND c.cardapio_id 	= en_cardapio_id
-			LOOP 
-			
-			--Loop no estoque 
-			BEGIN 
+			LOOP
+
+			--Loop no estoque
+			BEGIN
 				SELECT 1
 				  INTO vn_aux
-				  FROM estoque e 
+				  FROM estoque e
 				 WHERE e.estoque_id  = vt_estoque.estoque_id
 				 AND e.qtde >= (vt_estoque.qtde ) ;
-			  
-			EXCEPTION 
-			   WHEN no_data_found THEN 
+
+			EXCEPTION
+			   WHEN no_data_found THEN
 			      vn_aux := 0;
 			  	  RAISE;
 		    END;
-			if vn_aux is null then 
+			if vn_aux is null then
 			   vn_aux := 0;
 			end if;
-		    -- Atualiza estoque 
-		    IF vn_aux =  1 THEN 
+		    -- Atualiza estoque
+		    IF vn_aux =  1 THEN
 		        BEGIN
 			       UPDATE estoque SET qtde = qtde  - (vt_estoque.qtde)
 			       WHERE estoque_id = vt_estoque.estoque_id ;
-			    
+
 			    EXCEPTION
 			       WHEN OTHERS THEN
 			       RAISE;
 			    END;
 		    END IF;
-		   
-		 
-		END LOOP;		
-		
+
+
+		END LOOP;
+
 	END LOOP;
 
 	RETURN vn_aux;
- 
+
 EXCEPTION
 
-   when others then 
+   when others then
        raise notice 'The transaction is in an uncommittable state. '
                     'Transaction was rolled back';
        raise notice '% %', SQLERRM, SQLSTATE;
@@ -329,12 +327,12 @@ $$ LANGUAGE plpgsql;
 
 ---------------
 CREATE OR REPLACE FUNCTION  fkg_val_comanda ( en_usuario_id_clie      int ) RETURNS int   AS $$
-DECLARE 
-	vn_comanda_id       int;      
-BEGIN  
- 
+DECLARE
+	vn_comanda_id       int;
+BEGIN
+
 		SELECT ca.comanda_id ca
-		 INTO vn_comanda_id 
+		 INTO vn_comanda_id
 		  FROM comanda ca
 		  WHERE ca.usuario_id = en_usuario_id_clie
 		    AND ca.dt_encerramento  IS NULL ;
@@ -342,12 +340,12 @@ BEGIN
          INSERT INTO comanda  (dt_inic, dt_encerramento, vlr_total, usuario_id)
                VALUES ( now(), NULL, NULL, en_usuario_id_clie ) RETURNING comanda_id INTO vn_comanda_id ;
     END IF;
-	
+
 	RETURN vn_comanda_id;
- 
+
 EXCEPTION
 
-   when others then 
+   when others then
        raise notice 'The transaction is in an uncommittable state. '
                     'Transaction was rolled back';
        raise notice '% %', SQLERRM, SQLSTATE;
@@ -357,18 +355,18 @@ $$ LANGUAGE plpgsql;
 
 
 -------------------
-CREATE OR REPLACE FUNCTION  fkg_gera_pedido ( en_usuario_id_clie      int 
+CREATE OR REPLACE FUNCTION  fkg_gera_pedido ( en_usuario_id_clie      int
 											, en_usuario_id_func	  int
-											, en_unidade_id			  int 
-											, en_cardapio_id		  int 
-											, en_qtde				  int 
+											, en_unidade_id			  int
+											, en_cardapio_id		  int
+											, en_qtde				  int
  											) RETURNS int   AS $$
-DECLARE 
+DECLARE
 	vn_pedido_id       int;
     vn_comanda_id	   int;
     vn_existe_estoque  int;
-   
-BEGIN  
+
+BEGIN
    --CONSULTA EXISTENCIA DA COMANDA, SE NÃO CRIA NOVA
    SELECT FKG_VAL_COMANDA(en_usuario_id_clie) INTO vn_comanda_id;
    --VALIDA SE EXISTE ESTOQUE PARA PRODUZIR O PEDIDO, SE SIM JÀ REALIZA UPDATE NO VALOR DO ESTOQUE E DIMINUI A QUANTIDADE
@@ -377,21 +375,21 @@ BEGIN
    IF vn_existe_estoque = 1 THEN
       --CRIA REGISTRO DE PEDIDO
    	  INSERT INTO pedido (dt_inic, aprovado, dt_fim, comanda_id, usuario_id_cliente, usuario_id_funcionario)
-   	  VALUES 
+   	  VALUES
    	  (now(), 0, NULL, vn_comanda_id, en_usuario_id_clie, en_usuario_id_func) RETURNING pedido_id INTO vn_pedido_id;
    	  --GRAVA RELACAO DO PEDIDO COM O CARDAPIO E QUANTIDADE
    	  INSERT INTO cardapio_pedido (cardapio_id, pedido_id, qtde) VALUES (en_cardapio_id, vn_pedido_id, en_qtde);
    	  --
-   	  --COMMIT;  
-   
+   	  --COMMIT;
+
    END IF;
-  
-  
+
+
    RETURN vn_pedido_id;
- 
+
 EXCEPTION
 
-   when others then 
+   when others then
        ROLLBACK;
        raise notice 'The transaction is in an uncommittable state. '
                     'Transaction was rolled back';
@@ -401,44 +399,44 @@ $$ LANGUAGE plpgsql;
 
 ------------------------------------------------
 CREATE OR REPLACE FUNCTION  fkg_fecha_comanda (en_usuario_id_clie int) RETURNS varchar   AS $$
-DECLARE 
+DECLARE
 	vn_tot_pagar       float;
     vn_comanda_id	   int;
     vv_return	       varchar(100);
- 
-BEGIN  
+
+BEGIN
    SELECT sum( ( (i.vlr * ec.qtde ) + c2.vlr_preparo) *  cp.qtde )
-      , c.comanda_id 
+      , c.comanda_id
      INTO vn_tot_pagar
         , vn_comanda_id
-     FROM comanda c 
-     JOIN pedido  p           ON c.usuario_id   = p.usuario_id_cliente 
-     JOIN cardapio_pedido cp  ON p.pedido_id    = cp.pedido_id 
-     JOIN cardapio c2         ON cp.cardapio_id = c2.cardapio_id 
-     JOIN estoque_cardapio ec ON c2.cardapio_id = ec.cardapio_id 
-     JOIN estoque e           ON ec.estoque_id  = e.estoque_id 
-     JOIN item i              ON e.item_id 	    = i.item_id 
+     FROM comanda c
+     JOIN pedido  p           ON c.usuario_id   = p.usuario_id_cliente
+     JOIN cardapio_pedido cp  ON p.pedido_id    = cp.pedido_id
+     JOIN cardapio c2         ON cp.cardapio_id = c2.cardapio_id
+     JOIN estoque_cardapio ec ON c2.cardapio_id = ec.cardapio_id
+     JOIN estoque e           ON ec.estoque_id  = e.estoque_id
+     JOIN item i              ON e.item_id 	    = i.item_id
      WHERE c.usuario_id                         = en_usuario_id_clie
       AND p.aprovado 	                        = 1 --Pedido Aprovado
       AND c.dt_encerramento  IS NULL
     GROUP BY c.comanda_id;
-     
-    IF vn_comanda_id IS NOT NULL THEN 
+
+    IF vn_comanda_id IS NOT NULL THEN
        --
        UPDATE comanda  SET dt_encerramento = now()
                          , vlr_total 	   = vn_tot_pagar
        WHERE comanda_id  = vn_comanda_id;
        --
        vv_return := 'Comanda fechada com sucesso! Volte Sempre';
-    ELSE 
+    ELSE
        vv_return := 'Não foi selecionada nenhuma comanda aberta para o usuário em questão!';
     END IF;
-	
+
    RETURN  vv_return;
- 
+
 EXCEPTION
 
-   when others then 
+   when others then
        raise notice 'The transaction is in an uncommittable state. '
                     'Transaction was rolled back';
        raise notice '% %', SQLERRM, SQLSTATE;
