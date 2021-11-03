@@ -313,7 +313,9 @@ BEGIN
 		END LOOP;
 
 	END LOOP;
-
+	
+	vn_aux := COALESCE(vn_aux, 0);
+	
 	RETURN vn_aux;
 
 EXCEPTION
@@ -323,7 +325,8 @@ EXCEPTION
                     'Transaction was rolled back';
        raise notice '% %', SQLERRM, SQLSTATE;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql; 
+
 
 ---------------
 CREATE OR REPLACE FUNCTION  fkg_val_comanda ( en_usuario_id_clie      int ) RETURNS int   AS $$
@@ -354,48 +357,65 @@ $$ LANGUAGE plpgsql;
 
 
 
+CREATE TYPE vt_dados AS (en_usuario_id_clie   int
+					  , en_usuario_id_func	  int
+					  , en_unidade_id	      int
+					  , en_cardapio_id		  int
+					  , en_qtde				  int
+					  );
+
+					 SELECT * FROM pedido p 
+/* COMO CHAMAR					 
+SELECT fkg_gera_pedido( '(1,2,1,19,5)'
+                      ,'(1,2,1,1,1)' );
+*/     
+					  
 -------------------
-CREATE OR REPLACE FUNCTION  fkg_gera_pedido ( en_usuario_id_clie      int
-											, en_usuario_id_func	  int
-											, en_unidade_id			  int
-											, en_cardapio_id		  int
-											, en_qtde				  int
- 											) RETURNS int   AS $$
+CREATE OR REPLACE FUNCTION  fkg_gera_pedido (VARIADIC  dados  vt_dados[] ) RETURNS int   AS $$
 DECLARE
 	vn_pedido_id       int;
     vn_comanda_id	   int;
     vn_existe_estoque  int;
+    arr	               vt_dados;
+ 
 
 BEGIN
-   --CONSULTA EXISTENCIA DA COMANDA, SE NÃO CRIA NOVA
-   SELECT FKG_VAL_COMANDA(en_usuario_id_clie) INTO vn_comanda_id;
-   --VALIDA SE EXISTE ESTOQUE PARA PRODUZIR O PEDIDO, SE SIM JÀ REALIZA UPDATE NO VALOR DO ESTOQUE E DIMINUI A QUANTIDADE
-   SELECT FKG_VAL_ESTOQUE(en_unidade_id , en_cardapio_id, en_qtde) INTO vn_existe_estoque;
+   FOREACH arr IN ARRAY dados LOOP
+    
+   --CONSULTA EXISTENCIA DA COMANDA, SE NÃƒO CRIA NOVA
+   SELECT FKG_VAL_COMANDA(arr.en_usuario_id_clie) INTO vn_comanda_id;
+   --VALIDA SE EXISTE ESTOQUE PARA PRODUZIR O PEDIDO, SE SIM  REALIZA UPDATE NO VALOR DO ESTOQUE E DIMINUI A QUANTIDADE
+   SELECT FKG_VAL_ESTOQUE(arr.en_unidade_id , arr.en_cardapio_id, arr.en_qtde) INTO vn_existe_estoque;
    --
    IF vn_existe_estoque = 1 THEN
       --CRIA REGISTRO DE PEDIDO
    	  INSERT INTO pedido (dt_inic, aprovado, dt_fim, comanda_id, usuario_id_cliente, usuario_id_funcionario)
    	  VALUES
-   	  (now(), 0, NULL, vn_comanda_id, en_usuario_id_clie, en_usuario_id_func) RETURNING pedido_id INTO vn_pedido_id;
+   	  (now(), 0, NULL, vn_comanda_id, arr.en_usuario_id_clie, arr.en_usuario_id_func) RETURNING pedido_id INTO vn_pedido_id;
    	  --GRAVA RELACAO DO PEDIDO COM O CARDAPIO E QUANTIDADE
-   	  INSERT INTO cardapio_pedido (cardapio_id, pedido_id, qtde) VALUES (en_cardapio_id, vn_pedido_id, en_qtde);
+   	  INSERT INTO cardapio_pedido (cardapio_id, pedido_id, qtde) VALUES (arr.en_cardapio_id, vn_pedido_id, arr.en_qtde);
    	  --
    	  --COMMIT;
-
+   ELSE 
+      RETURN -1;
    END IF;
-
-
+   --
+     
+   END LOOP;
+   --SE RETORNAR  -1 ERRO!
+   SELECT  coalesce(vn_pedido_id, -1) INTO vn_pedido_id ;
+   --
    RETURN vn_pedido_id;
 
 EXCEPTION
-
-   when others then
-       ROLLBACK;
-       raise notice 'The transaction is in an uncommittable state. '
+ 
+   when others THEN
+       raise notice 'Não foi possível efetuar o pedido, verifique o estoque ou se o produto existe! '
                     'Transaction was rolled back';
        raise notice '% %', SQLERRM, SQLSTATE;
 END;
 $$ LANGUAGE plpgsql;
+
 
 ------------------------------------------------
 CREATE OR REPLACE FUNCTION  fkg_fecha_comanda (en_usuario_id_clie int) RETURNS varchar   AS $$
