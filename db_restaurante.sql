@@ -256,7 +256,7 @@ INSERT INTO COMANDA (DT_INIC , dt_encerramento, vlr_total, usuario_id) VALUES (N
 INSERT INTO pedido (dt_inic, aprovado, dt_fim, comanda_id, usuario_id_cliente, usuario_id_funcionario)
 VALUES (now(), 0, NULL, 1, 1, 2);
 
-INSERT INTO cardapio_pedido values  (1, 1, 2);
+INSERT INTO cardapio_pedido (cardapio_id, pedido_id, qtde) values  (1, 1, 2);
 
 /* STORED PROCEDURES
 Chamar apenas fkg_gera_pedido e fkg_fecha_comanda
@@ -383,7 +383,7 @@ BEGIN
         FROM pedido p 
         JOIN comanda c ON p.comanda_id  = c.comanda_id 
        WHERE p.dt_fim  IS NULL 
-        AND p.usuario_id_cliente  = 1
+        AND p.usuario_id_cliente  = en_usuario_id_clie
         AND c.dt_encerramento  IS NULL
         ORDER BY p.pedido_id DESC 
         LIMIT 1;

@@ -7,6 +7,7 @@ import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class InventoryMenuService {
@@ -17,6 +18,10 @@ public class InventoryMenuService {
     public InventoryMenuService(InventoryMenuRepository inventoryMenuRepository, InventoryService inventoryService) {
         this.inventoryMenuRepository = inventoryMenuRepository;
         this.inventoryService = inventoryService;
+    }
+
+    public List<InventoryMenu> findInventoryMenu(Menu menu) {
+        return inventoryMenuRepository.findByMenu(menu);
     }
 
     public InventoryMenu newInventoryMenu(Integer inventoryId, Menu menu, BigDecimal quantity) {
