@@ -3,10 +3,10 @@
 Implementação controle restaurantes matéria pratica integrada II
 
 ### Metas
-- [ ] CRUD Itens
+- [x] CRUD Itens
 - [x] CRUD Usuário
-- [ ] CRUD Cardápio
+- [x] CRUD Cardápio
 - [X] Controle fornecedores
-- [ ] Controle estoque
-- [ ] Fluxo pedido
+- [x] Controle estoque
+- [x] Fluxo pedido
 - [x] Autenticação usuário
