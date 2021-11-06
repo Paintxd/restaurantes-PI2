@@ -5,13 +5,11 @@ import br.edu.unoesc.pi2.restaurantes.dtos.MenuViewDto;
 import br.edu.unoesc.pi2.restaurantes.services.MenuService;
 import javassist.NotFoundException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/menus")
@@ -21,6 +19,11 @@ public class MenuController {
 
     public MenuController(MenuService menuService) {
         this.menuService = menuService;
+    }
+
+    @GetMapping("/info/restaurant/{id}")
+    public ResponseEntity<List<MenuDto>> restaurantMenus(@PathVariable Integer id) throws NotFoundException {
+        return ResponseEntity.ok(menuService.getRestaurantMenus(id));
     }
 
     @PostMapping("new")
