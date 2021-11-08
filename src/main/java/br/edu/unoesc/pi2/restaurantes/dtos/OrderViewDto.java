@@ -7,46 +7,46 @@ import java.util.List;
 public class OrderViewDto {
 
     @NotNull(message = "Informe o cliente que fez o pedido")
-    private Integer clientId;
+    private int clientId;
 
     @NotNull(message = "Informe o funcionario que atendeu esse pedido")
-    private Integer employeeId;
+    private int employeeId;
 
     @NotNull(message = "Informe o restaurante de onde foi feito o pedido")
-    private Integer restaurantId;
+    private int restaurantId;
 
     @NotNull(message = "Informe os itens do cardapio que foram pedido")
     @Size(min = 1, message = "Informe ao menos um item do cardapio para abrir um pedido")
     private List<MenuOrderViewDto> menuOrders;
 
-    public OrderViewDto(Integer clientId, Integer employeeId, Integer restaurantId, List<MenuOrderViewDto> menuOrders) {
+    public OrderViewDto(int clientId, int employeeId, int restaurantId, List<MenuOrderViewDto> menuOrders) {
         this.clientId = clientId;
         this.employeeId = employeeId;
         this.restaurantId = restaurantId;
         this.menuOrders = menuOrders;
     }
 
-    public Integer getClientId() {
+    public int getClientId() {
         return clientId;
     }
 
-    public void setClientId(Integer clientId) {
+    public void setClientId(int clientId) {
         this.clientId = clientId;
     }
 
-    public Integer getEmployeeId() {
+    public int getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(Integer employeeId) {
+    public void setEmployeeId(int employeeId) {
         this.employeeId = employeeId;
     }
 
-    public Integer getRestaurantId() {
+    public int getRestaurantId() {
         return restaurantId;
     }
 
-    public void setRestaurantId(Integer restaurantId) {
+    public void setRestaurantId(int restaurantId) {
         this.restaurantId = restaurantId;
     }
 

@@ -13,11 +13,11 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findByClient(User user);
 
-    @Query(value = "{call fkg_gera_pedido(:en_usuario_id_clie, :en_usuario_id_func, :en_unidade_id, :en_cardapio_id, :en_qtde)}", nativeQuery = true)
-    Integer createOrder(@Param("en_usuario_id_clie") Integer clientId,
-                        @Param("en_usuario_id_func") Integer employeeId,
-                        @Param("en_unidade_id") Integer restaurantId,
-                        @Param("en_cardapio_id") Integer cardapioId,
-                        @Param("en_qtde") Integer qtde
+    @Query(value = "select fkg_gera_pedido(:en_usuario_id_clie, :en_usuario_id_func, :en_unidade_id, :en_cardapio_id, :en_qtde)", nativeQuery = true)
+    Integer createOrder(@Param("en_usuario_id_clie") int clientId,
+                             @Param("en_usuario_id_func") int employeeId,
+                             @Param("en_unidade_id") int restaurantId,
+                             @Param("en_cardapio_id") int cardapioId,
+                             @Param("en_qtde") int qtde
     );
 }
