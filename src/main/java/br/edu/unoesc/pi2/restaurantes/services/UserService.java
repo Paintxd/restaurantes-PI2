@@ -9,6 +9,8 @@ import javassist.NotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -40,6 +42,15 @@ public class UserService {
         var userMapper = UserMapper.INSTANCE;
 
         return userMapper.userToUserDto(user);
+    }
+
+    public List<UserDto> findAll() {
+        var userMapper = UserMapper.INSTANCE;
+
+        return userRepository.findAll()
+                .parallelStream()
+                .map(userMapper::userToUserDto)
+                .toList();
     }
 
 }

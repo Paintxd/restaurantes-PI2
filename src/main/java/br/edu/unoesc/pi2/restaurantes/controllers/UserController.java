@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("user")
@@ -40,6 +41,11 @@ public class UserController {
         var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return ResponseEntity.ok(userService.userInfo(user.getId()));
+    }
+
+    @GetMapping("info/all")
+    public ResponseEntity<List<UserDto>> findAllUsers() {
+        return ResponseEntity.ok(userService.findAll());
     }
 
 }
