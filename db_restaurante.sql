@@ -451,7 +451,7 @@ BEGIN
      JOIN estoque e           ON ec.estoque_id  = e.estoque_id
      JOIN item i              ON e.item_id 	    = i.item_id
      WHERE c.usuario_id                         = en_usuario_id_clie
-      AND p.aprovado 	                        = 1 --Pedido Aprovado
+      AND p.aprovado 	                        = 2 --Pedido Aprovado
       AND c.dt_encerramento  IS NULL
     GROUP BY c.comanda_id;
 

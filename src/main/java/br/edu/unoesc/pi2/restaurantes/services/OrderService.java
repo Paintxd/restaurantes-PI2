@@ -4,6 +4,7 @@ import br.edu.unoesc.pi2.restaurantes.dtos.OrderDto;
 import br.edu.unoesc.pi2.restaurantes.dtos.OrderViewDto;
 import br.edu.unoesc.pi2.restaurantes.mappers.OrderMapper;
 import br.edu.unoesc.pi2.restaurantes.models.Order;
+import br.edu.unoesc.pi2.restaurantes.models.OrderPad;
 import br.edu.unoesc.pi2.restaurantes.models.OrderStatusEnum;
 import br.edu.unoesc.pi2.restaurantes.models.User;
 import br.edu.unoesc.pi2.restaurantes.repositorys.OrderRepository;
@@ -25,6 +26,13 @@ public class OrderService {
 
     public List<OrderDto> findAll(User user) {
         return orderRepository.findByClient(user)
+                .parallelStream()
+                .map(this::map)
+                .toList();
+    }
+
+    public List<OrderDto> findOrderPadOrders(OrderPad orderPad) {
+        return orderRepository.findByOrderPad(orderPad)
                 .parallelStream()
                 .map(this::map)
                 .toList();
