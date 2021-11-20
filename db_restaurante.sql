@@ -477,7 +477,12 @@ EXCEPTION
 END;
 $$ LANGUAGE plpgsql;
 
-
+CREATE INDEX idx_pedido_status ON pedido(comanda_id, aprovado);
+CREATE INDEX idx_comanda_usuario ON comanda(usuario_id);
+CREATE INDEX idx_usuario_email ON usuario (email);
+CREATE INDEX idx_tppessoa_descricao ON tipo_pessoa(descricao);
+CREATE INDEX idx_cardapio_unidade ON cardapio(unidade_id);
+CREATE INDEX idx_usuario_tppessoa_email ON usuario(tppessoa_id, email);
 
 	
 	
