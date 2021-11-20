@@ -432,11 +432,13 @@ END;
 $$ LANGUAGE plpgsql;
 
 ------------------------------------------------
-CREATE OR REPLACE FUNCTION  fkg_fecha_comanda (en_usuario_id_clie int) RETURNS varchar   AS $$
+DROP FUNCTION fkg_fecha_comanda;
+
+CREATE OR REPLACE FUNCTION  fkg_fecha_comanda (en_usuario_id_clie int) RETURNS int   AS $$
 DECLARE
 	vn_tot_pagar       float;
     vn_comanda_id	   int;
-    vv_return	       varchar(100);
+    vn_return	       int;
 
 BEGIN
    SELECT sum( ( (i.vlr * ec.qtde ) + c2.vlr_preparo) *  cp.qtde )
@@ -461,9 +463,9 @@ BEGIN
                          , vlr_total 	   = vn_tot_pagar
        WHERE comanda_id  = vn_comanda_id;
        --
-       vv_return := 'Comanda fechada com sucesso! Volte Sempre';
+       vn_return := vn_comanda_id;
     ELSE
-       vv_return := 'Não foi selecionada nenhuma comanda aberta para o usuário em questão!';
+       vn_return := -1;-- 'Não foi selecionada nenhuma comanda aberta para o usuário em questão!';
     END IF;
 
    RETURN  vv_return;
@@ -476,6 +478,7 @@ EXCEPTION
        raise notice '% %', SQLERRM, SQLSTATE;
 END;
 $$ LANGUAGE plpgsql;
+
 
 CREATE INDEX idx_pedido_status ON pedido(comanda_id, aprovado);
 CREATE INDEX idx_comanda_usuario ON comanda(usuario_id);
