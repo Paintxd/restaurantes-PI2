@@ -468,7 +468,7 @@ BEGIN
        vn_return := -1;-- 'Não foi selecionada nenhuma comanda aberta para o usuário em questão!';
     END IF;
 
-   RETURN  vv_return;
+   RETURN  vn_return;
 
 EXCEPTION
 

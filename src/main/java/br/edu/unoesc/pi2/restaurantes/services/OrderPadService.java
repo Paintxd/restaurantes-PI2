@@ -1,5 +1,6 @@
 package br.edu.unoesc.pi2.restaurantes.services;
 
+import br.edu.unoesc.pi2.restaurantes.dtos.CloseOrderPadDto;
 import br.edu.unoesc.pi2.restaurantes.dtos.OpenOrderPadDto;
 import br.edu.unoesc.pi2.restaurantes.models.User;
 import br.edu.unoesc.pi2.restaurantes.repositorys.OrderPadRepository;
@@ -29,7 +30,18 @@ public class OrderPadService {
                 .toList();
     }
 
-    public void closeOrderPad(User user) {
-        orderPadRepository.closeOrderPad(user.getId());
+    public CloseOrderPadDto closeOrderPad(User user) {
+        var orderPadId = orderPadRepository.closeOrderPad(user.getId());
+
+        var orderPad = orderPadRepository.getById(orderPadId);
+        var orders = orderService.findOrderPadOrders(orderPad);
+
+        return new CloseOrderPadDto(
+                orderPad.getId(),
+                orderPad.getOpenDateTime(),
+                orderPad.getCloseDateTime(),
+                orders,
+                orderPad.getPaymentAmount()
+        );
     }
 }

@@ -1,5 +1,6 @@
 package br.edu.unoesc.pi2.restaurantes.controllers;
 
+import br.edu.unoesc.pi2.restaurantes.dtos.CloseOrderPadDto;
 import br.edu.unoesc.pi2.restaurantes.dtos.OpenOrderPadDto;
 import br.edu.unoesc.pi2.restaurantes.models.User;
 import br.edu.unoesc.pi2.restaurantes.services.OrderPadService;
@@ -30,10 +31,9 @@ public class OrderPadController {
     }
 
     @PostMapping("/close")
-    public ResponseEntity<String> closeOrderPad() {
+    public ResponseEntity<CloseOrderPadDto> closeOrderPad() {
         var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        orderPadService.closeOrderPad(user);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(orderPadService.closeOrderPad(user));
     }
 }

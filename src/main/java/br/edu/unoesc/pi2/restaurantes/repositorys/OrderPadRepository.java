@@ -12,5 +12,5 @@ public interface OrderPadRepository extends JpaRepository<OrderPad, Integer> {
     List<OrderPad> findByClientAndCloseDateTimeIsNull(User user);
 
     @Query(value = "select fkg_fecha_comanda(:en_usuario_id_clie)", nativeQuery = true)
-    String closeOrderPad(@Param("en_usuario_id_clie") int clientId);
+    Integer closeOrderPad(@Param("en_usuario_id_clie") int clientId);
 }
