@@ -1,6 +1,5 @@
 package br.edu.unoesc.pi2.restaurantes.configurations.security;
 
-import br.edu.unoesc.pi2.restaurantes.repositorys.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -39,7 +38,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/user/signup").permitAll()
-                .antMatchers(HttpMethod.GET, "/user/info/*").hasAuthority("GERENTE")
                 .anyRequest().authenticated()
                 .and().cors()
                 .and().csrf().disable()
