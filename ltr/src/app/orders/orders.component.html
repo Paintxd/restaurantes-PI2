@@ -78,51 +78,39 @@
                 </div>
               </div>
 
-              <div formGroupName="menuOrders" class="row">
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Cardápio</mat-label>
-                    <input matInput formControlName="menuId" type="number" required>
-                    <mat-icon matSuffix>email</mat-icon>
+              <div formArrayName="menuOrders">
+                <div container *ngFor="let menuForm of menuOrders.controls">
+                  <div class="row" [formGroup]="menuForm">
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width">
+                        <mat-label>Cardápio</mat-label>
+                        <input matInput formControlName="menuId" type="number" required>
+                        <mat-icon matSuffix>email</mat-icon>
 
-                  </mat-form-field>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width">
+                        <mat-label>Quantidade</mat-label>
+                        <input matInput formControlName="quantity" type="number" required>
+                        <mat-icon matSuffix>email</mat-icon>
+
+                      </mat-form-field>
+                    </div>
+
+                  </div>
                 </div>
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Quantidade</mat-label>
-                    <input matInput formControlName="quantity" type="number" required>
-                    <mat-icon matSuffix>email</mat-icon>
-
-                  </mat-form-field>
-                </div>
-                <button id="btn" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" type="button" mat-raised-button color="primary">Adicionar</button>
-
-
               </div>
 
-              <div formGroupName="menuOrders" class="row">
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Cardápio</mat-label>
-                    <input matInput formControlName="menuId" type="number" required>
-                    <mat-icon matSuffix>email</mat-icon>
-
-                  </mat-form-field>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Quantidade</mat-label>
-                    <input matInput formControlName="quantity" type="number" required>
-                    <mat-icon matSuffix>email</mat-icon>
-
-                  </mat-form-field>
-                </div>
-                <button id="btn" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" type="button" mat-raised-button color="primary">Adicionar</button>
-
-
-              </div>
-
-
+              <button
+                id="btn"
+                class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2"
+                type="button"
+                mat-raised-button
+                color="primary"
+                (click)="addMenu()"
+              > Adicionar
+              </button>
 
               <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">

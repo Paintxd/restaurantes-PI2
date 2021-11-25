@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { menuOrders, OrdersModel } from './orders.models';
 import { CadOrdersService } from './orders.service';
@@ -25,6 +25,7 @@ export class OrdersComponent implements OnInit {
     ) {
 
     this.initFormOrders();
+    this.addMenu();
   }
   ngOnInit(): void {
      null;
@@ -36,11 +37,7 @@ export class OrdersComponent implements OnInit {
       clientId: [null, [Validators.required]],
       employeeId: [null, [Validators.required]],
       restaurantId: [null, [Validators.required]],
-      menuOrders: this.fb.group({
-        menuId: [null, [Validators.required]],
-        quantity:[null, [Validators.required]],
-      })
-
+      menuOrders: this.fb.array([]),
     });
   }
   submit() {
@@ -67,6 +64,19 @@ export class OrdersComponent implements OnInit {
       //this.toastr.error(err.error.errors, '');
     });
 
+  }
+
+  get menuOrders() {
+    return this.frmOrders.controls['menuOrders'] as FormArray;
+  }
+
+  addMenu() {
+    const menuForm = this.fb.group({
+      menuId: [null, Validators.required],
+      quantity: [0, Validators.required],
+    });
+
+    this.menuOrders.push(menuForm);
   }
 
 }
