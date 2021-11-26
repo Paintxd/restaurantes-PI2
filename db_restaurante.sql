@@ -441,12 +441,12 @@ DECLARE
     vn_return	       int;
 
 BEGIN
-   SELECT sum( ( (i.vlr * ec.qtde ) + c2.vlr_preparo) *  cp.qtde )
+ SELECT sum( ( (i.vlr * ec.qtde ) + c2.vlr_preparo) *  cp.qtde )
       , c.comanda_id
      INTO vn_tot_pagar
         , vn_comanda_id
      FROM comanda c
-     JOIN pedido  p           ON c.usuario_id   = p.usuario_id_cliente
+     JOIN pedido  p           ON (c.usuario_id   = p.usuario_id_cliente AND c.comanda_id = p.comanda_id )
      JOIN cardapio_pedido cp  ON p.pedido_id    = cp.pedido_id
      JOIN cardapio c2         ON cp.cardapio_id = c2.cardapio_id
      JOIN estoque_cardapio ec ON c2.cardapio_id = ec.cardapio_id
@@ -455,7 +455,7 @@ BEGIN
      WHERE c.usuario_id                         = en_usuario_id_clie
       AND p.aprovado 	                        = 2 --Pedido Aprovado
       AND c.dt_encerramento  IS NULL
-    GROUP BY c.comanda_id;
+    GROUP BY c.comanda_id; 
 
     IF vn_comanda_id IS NOT NULL THEN
        --
